@@ -1,0 +1,44 @@
+# CoreSkool .gitignore
+
+# Installation marker
+.installed
+
+# Logs
+logs/
+*.log
+
+# Uploads (user-generated content)
+public/uploads/**
+!public/uploads/.gitkeep
+
+# Vendor/Dependencies (if using Composer)
+vendor/
+!vendor/phpmailer/
+
+# IDE and Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Environment files
+.env
+.env.local
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+
+# Cache
+cache/
+*.cache
+
+# Database backups
+*.sql.backup
+backup/
+
+# OS generated files
+Thumbs.db
