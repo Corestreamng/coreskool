@@ -652,4 +652,4 @@ VALUES ('CoreSkool Academy', 'CS001', 'admin@coreskool.coinswipe.xyz', 'main', '
 
 -- Insert default admin user (password: admin123)
 INSERT INTO users (school_id, email, phone, password, role, first_name, last_name, gender, status) 
-VALUES (1, 'admin@coreskool.coinswipe.xyz', '08012345678', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'admin', 'System', 'Administrator', 'male', 'active');
+VALUES (1, 'admin@coreskool.coinswipe.xyz', '08012345678', '$2y$10$oY1NSNGLF22bzdDhCbdxUuYEcTKV.ucL/8jPS/ICJXFIghvvRBaCO', 'admin', 'System', 'Administrator', 'male', 'active');
