@@ -35,6 +35,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Validate required fields
     if (empty($data['first_name']) || empty($data['last_name']) || empty($data['gender']) || empty($data['password'])) {
         setFlash('danger', 'Please fill in all required fields');
+    } elseif ($data['password'] !== $_POST['confirm_password']) {
+        setFlash('danger', 'Passwords do not match');
     } else {
         // Register teacher
         $auth = new AuthController();
@@ -73,7 +75,7 @@ include APP_PATH . '/views/shared/header.php';
             </div>
             
             <div class="card-body">
-                <form method="POST" action="" enctype="multipart/form-data" data-validate>
+                <form method="POST" action="" data-validate>
                     <div class="row">
                         <!-- Personal Information -->
                         <div class="col-md-12">

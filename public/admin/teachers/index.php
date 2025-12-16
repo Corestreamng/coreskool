@@ -47,13 +47,17 @@ $totalItems = $totalStmt->fetch()['total'];
 
 // Pagination calculation
 $pagination = paginate($totalItems, $page, 20);
+$limit = (int)$pagination['items_per_page'];
+$offset = (int)$pagination['offset'];
 
 // Get teachers
 $sql = "SELECT * FROM users 
         $where
         ORDER BY created_at DESC
-        LIMIT {$pagination['items_per_page']} OFFSET {$pagination['offset']}";
+        LIMIT ? OFFSET ?";
 
+$params[] = $limit;
+$params[] = $offset;
 $stmt = $db->query($sql, $params);
 $teachers = $stmt->fetchAll();
 
