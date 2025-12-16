@@ -33,7 +33,8 @@ If the database is already installed:
 
 1. Access the fix script: `https://coreskool.coinswipe.xyz/fix_admin_password.php`
 2. The script will update the admin password to "admin123"
-3. **Important**: Delete the `fix_admin_password.php` file after use for security
+3. The script will automatically delete itself after successful execution for security
+4. If auto-deletion fails, manually delete the `fix_admin_password.php` file
 
 ### Option 3: Manual SQL Update
 If you have direct database access:

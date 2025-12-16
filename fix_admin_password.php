@@ -3,10 +3,18 @@
  * Fix Admin Password Script
  * Run this script to update the admin password to 'admin123'
  * Access via: https://coreskool.coinswipe.xyz/fix_admin_password.php
+ * 
+ * SECURITY: This file will self-delete after successful execution
  */
 
 // Include configuration
 require_once __DIR__ . '/config/config.php';
+
+// Check if database is already installed
+$checkFile = __DIR__ . '/.installed';
+if (!file_exists($checkFile)) {
+    die("<h2>Error</h2><p>Database not installed yet. Please run <a href='install.php'>install.php</a> first.</p>");
+}
 
 try {
     // Connect to database
@@ -29,7 +37,14 @@ try {
     echo "<strong>Password:</strong> admin123</p>";
     echo "<p><a href='public/index.php'>Go to Login Page</a></p>";
     echo "<hr>";
-    echo "<p><strong>Note:</strong> For security reasons, please delete this file (fix_admin_password.php) after use.</p>";
+    
+    // Self-delete this file for security
+    $currentFile = __FILE__;
+    if (unlink($currentFile)) {
+        echo "<p style='color: green;'><strong>✓ Security:</strong> This file has been automatically deleted.</p>";
+    } else {
+        echo "<p style='color: orange;'><strong>⚠ Warning:</strong> Could not auto-delete this file. Please manually delete 'fix_admin_password.php' for security.</p>";
+    }
     
 } catch (Exception $e) {
     echo "<h3 style='color: red;'>Error!</h3>";

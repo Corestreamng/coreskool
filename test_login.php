@@ -3,11 +3,19 @@
  * Login Test Script
  * This script tests the login functionality with the correct credentials
  * Access via: https://coreskool.coinswipe.xyz/test_login.php
+ * 
+ * SECURITY: This file will self-delete after successful test
  */
 
 // Include configuration
 require_once __DIR__ . '/config/config.php';
 require_once APP_PATH . '/controllers/AuthController.php';
+
+// Check if database is installed
+$checkFile = __DIR__ . '/.installed';
+if (!file_exists($checkFile)) {
+    die("<h2>Error</h2><p>Database not installed yet. Please run <a href='install.php'>install.php</a> first.</p>");
+}
 
 echo "<h2>Login Test</h2>";
 echo "<p>Testing login with admin@coreskool.coinswipe.xyz / admin123</p>";
@@ -65,7 +73,18 @@ try {
     }
     
     echo "<hr>";
-    echo "<p><strong>Note:</strong> For security reasons, please delete this file (test_login.php) after testing.</p>";
+    
+    // Self-delete this file for security after successful test
+    if ($result['success']) {
+        $currentFile = __FILE__;
+        if (unlink($currentFile)) {
+            echo "<p style='color: green;'><strong>✓ Security:</strong> This test file has been automatically deleted.</p>";
+        } else {
+            echo "<p style='color: orange;'><strong>⚠ Warning:</strong> Could not auto-delete this file. Please manually delete 'test_login.php' for security.</p>";
+        }
+    } else {
+        echo "<p><strong>Note:</strong> This file will auto-delete after a successful login test. Please fix the issue and refresh.</p>";
+    }
     
 } catch (Exception $e) {
     echo "<h3 style='color: red;'>Error!</h3>";
