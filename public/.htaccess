@@ -1,0 +1,25 @@
+# CoreSkool Public .htaccess
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    
+    # Remove index.php from URL
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^([^/]+)/([^/]+)\.php$ $1/$2.php [L]
+</IfModule>
+
+# Protect uploaded files from execution
+<Directory "uploads">
+    <FilesMatch "\.php$">
+        Order allow,deny
+        Deny from all
+    </FilesMatch>
+</Directory>
+
+# Allow access to assets
+<Directory "assets">
+    Options -Indexes
+    AllowOverride None
+    Require all granted
+</Directory>
