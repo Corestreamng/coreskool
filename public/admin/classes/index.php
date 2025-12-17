@@ -130,7 +130,7 @@ include APP_PATH . '/views/shared/header.php';
                                         <td><?php echo $class['class_level'] ?: 'N/A'; ?></td>
                                         <td><?php echo htmlspecialchars($class['section']) ?: 'N/A'; ?></td>
                                         <td><?php echo htmlspecialchars($class['room_number']) ?: 'N/A'; ?></td>
-                                        <td><?php echo $class['teacher_name'] ?: '<span style="color: #6b7280;">Not Assigned</span>'; ?></td>
+                                        <td><?php echo $class['teacher_name'] ? htmlspecialchars($class['teacher_name']) : '<span style="color: #6b7280;">Not Assigned</span>'; ?></td>
                                         <td><?php echo $class['capacity']; ?></td>
                                         <td>
                                             <span class="badge badge-info"><?php echo $class['student_count']; ?></span>
