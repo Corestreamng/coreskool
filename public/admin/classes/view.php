@@ -252,7 +252,7 @@ include APP_PATH . '/views/shared/header.php';
                                     <tr>
                                         <td><?php echo htmlspecialchars($subject['code']) ?: 'N/A'; ?></td>
                                         <td><?php echo htmlspecialchars($subject['name']); ?></td>
-                                        <td><?php echo htmlspecialchars($subject['teacher_name']) ?: '<span style="color: #6b7280;">Not Assigned</span>'; ?></td>
+                                        <td><?php echo $subject['teacher_name'] ? htmlspecialchars($subject['teacher_name']) : '<span style="color: #6b7280;">Not Assigned</span>'; ?></td>
                                     </tr>
                                 <?php endforeach; ?>
                             </tbody>
