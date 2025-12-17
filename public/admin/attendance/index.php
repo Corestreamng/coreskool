@@ -79,50 +79,42 @@ include APP_PATH . '/views/shared/header.php';
         <?php if ($selectedClass && $totalStudents > 0): ?>
         <div class="row mb-4">
             <div class="col-md-3">
-                <div class="stat-card" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
-                    <div class="stat-icon">
+                <div class="stats-card">
+                    <div class="stats-icon" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;">
                         <i class="fas fa-users"></i>
                     </div>
-                    <div class="stat-details">
-                        <h3><?php echo $totalStudents; ?></h3>
-                        <p>Total Students</p>
-                    </div>
+                    <div class="stats-value"><?php echo $totalStudents; ?></div>
+                    <div class="stats-label">Total Students</div>
                 </div>
             </div>
             
             <div class="col-md-3">
-                <div class="stat-card" style="background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);">
-                    <div class="stat-icon">
+                <div class="stats-card">
+                    <div class="stats-icon" style="background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%); color: white;">
                         <i class="fas fa-check-circle"></i>
                     </div>
-                    <div class="stat-details">
-                        <h3><?php echo $presentCount; ?></h3>
-                        <p>Present (<?php echo $attendancePercentage; ?>%)</p>
-                    </div>
+                    <div class="stats-value"><?php echo $presentCount; ?></div>
+                    <div class="stats-label">Present (<?php echo $attendancePercentage; ?>%)</div>
                 </div>
             </div>
             
             <div class="col-md-3">
-                <div class="stat-card" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
-                    <div class="stat-icon">
+                <div class="stats-card">
+                    <div class="stats-icon" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white;">
                         <i class="fas fa-times-circle"></i>
                     </div>
-                    <div class="stat-details">
-                        <h3><?php echo $absentCount; ?></h3>
-                        <p>Absent</p>
-                    </div>
+                    <div class="stats-value"><?php echo $absentCount; ?></div>
+                    <div class="stats-label">Absent</div>
                 </div>
             </div>
             
             <div class="col-md-3">
-                <div class="stat-card" style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);">
-                    <div class="stat-icon">
+                <div class="stats-card">
+                    <div class="stats-icon" style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%); color: white;">
                         <i class="fas fa-clock"></i>
                     </div>
-                    <div class="stat-details">
-                        <h3><?php echo $lateCount; ?></h3>
-                        <p>Late</p>
-                    </div>
+                    <div class="stats-value"><?php echo $lateCount; ?></div>
+                    <div class="stats-label">Late</div>
                 </div>
             </div>
         </div>
