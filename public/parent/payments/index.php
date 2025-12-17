@@ -27,7 +27,7 @@ $wardIds = array_column($wards, 'id');
 
 // Get payments for all wards
 $payments = [];
-if (!empty($wardIds)) {
+if (!empty($wardIds) && count($wardIds) > 0) {
     $placeholders = implode(',', array_fill(0, count($wardIds), '?'));
     $paymentsQuery = $db->query("
         SELECT p.*, u.first_name, u.last_name, ft.name as fee_type_name
@@ -42,7 +42,8 @@ if (!empty($wardIds)) {
 
 // Get outstanding fees
 $outstanding = [];
-if (!empty($wardIds)) {
+if (!empty($wardIds) && count($wardIds) > 0) {
+    $placeholders = implode(',', array_fill(0, count($wardIds), '?'));
     $outstandingQuery = $db->query("
         SELECT 
             u.first_name, u.last_name,
