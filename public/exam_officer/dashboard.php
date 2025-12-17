@@ -19,7 +19,9 @@ $totalExams = $examsQuery->fetch()['count'];
 $ongoingQuery = $db->query("SELECT COUNT(*) as count FROM exams WHERE status = 'ongoing' AND school_id = ?", [$_SESSION['school_id']]);
 $ongoingExams = $ongoingQuery->fetch()['count'];
 
-$resultsQuery = $db->query("SELECT COUNT(*) as count FROM results WHERE school_id = ? AND status = 'approved'", [$_SESSION['school_id']]);
+$resultsQuery = $db->query("SELECT COUNT(*) as count FROM results r 
+    INNER JOIN users u ON r.student_id = u.id 
+    WHERE u.school_id = ? AND r.status = 'approved'", [$_SESSION['school_id']]);
 $totalResults = $resultsQuery->fetch()['count'];
 
 $cbtQuery = $db->query("SELECT COUNT(*) as count FROM cbt_exams WHERE school_id = ?", [$_SESSION['school_id']]);
