@@ -14,14 +14,18 @@ $db = Database::getInstance();
 
 // Handle form submission
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $name = sanitize($_POST['name']);
-    $code = sanitize($_POST['code'] ?? '');
-    $description = sanitize($_POST['description'] ?? '');
-    
-    // Validate required fields
-    if (empty($name)) {
-        setFlash('danger', 'Subject name is required');
+    // Verify CSRF token
+    if (!isset($_POST['csrf_token']) || !verifyCsrfToken($_POST['csrf_token'])) {
+        setFlash('danger', 'Invalid form submission. Please try again.');
     } else {
+        $name = sanitize($_POST['name']);
+        $code = sanitize($_POST['code'] ?? '');
+        $description = sanitize($_POST['description'] ?? '');
+        
+        // Validate required fields
+        if (empty($name)) {
+            setFlash('danger', 'Subject name is required');
+        } else {
         try {
             // Check if subject name already exists
             $existingSubject = $db->query("SELECT id FROM subjects WHERE name = ? AND school_id = ? AND status = 'active'", 
@@ -29,26 +33,40 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             
             if ($existingSubject) {
                 setFlash('danger', 'A subject with this name already exists');
-            } else {
+            } elseif ($code) {
                 // Check if code is provided and if it's unique
-                if ($code) {
-                    $existingCode = $db->query("SELECT id FROM subjects WHERE code = ? AND school_id = ? AND status = 'active'", 
-                        [$code, $_SESSION['school_id']])->fetch();
-                    
-                    if ($existingCode) {
-                        setFlash('danger', 'A subject with this code already exists');
-                        goto skipInsert;
-                    }
-                }
+                $existingCode = $db->query("SELECT id FROM subjects WHERE code = ? AND school_id = ? AND status = 'active'", 
+                    [$code, $_SESSION['school_id']])->fetch();
                 
-                // Insert subject
+                if ($existingCode) {
+                    setFlash('danger', 'A subject with this code already exists');
+                } else {
+                    // Insert subject
+                    $sql = "INSERT INTO subjects (school_id, name, code, description, status, created_at) 
+                            VALUES (?, ?, ?, ?, 'active', NOW())";
+                    
+                    $params = [
+                        $_SESSION['school_id'],
+                        $name,
+                        $code,
+                        $description ?: null
+                    ];
+                    
+                    $db->query($sql, $params);
+                    
+                    logActivity($_SESSION['user_id'], 'add_subject', "Added new subject: {$name}", $_SERVER['REMOTE_ADDR']);
+                    setFlash('success', "Subject '{$name}' added successfully!");
+                    redirect('admin/subjects/index.php');
+                }
+            } else {
+                // Insert subject without code check
                 $sql = "INSERT INTO subjects (school_id, name, code, description, status, created_at) 
                         VALUES (?, ?, ?, ?, 'active', NOW())";
                 
                 $params = [
                     $_SESSION['school_id'],
                     $name,
-                    $code ?: null,
+                    null,
                     $description ?: null
                 ];
                 
@@ -58,11 +76,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 setFlash('success', "Subject '{$name}' added successfully!");
                 redirect('admin/subjects/index.php');
             }
-            
-            skipInsert:
         } catch (Exception $e) {
             error_log("Failed to add subject: " . $e->getMessage());
             setFlash('danger', 'Failed to add subject. Please try again.');
+        }
         }
     }
 }
@@ -91,6 +108,7 @@ include APP_PATH . '/views/shared/header.php';
             
             <div class="card-body">
                 <form method="POST" action="">
+                    <input type="hidden" name="csrf_token" value="<?php echo generateCsrfToken(); ?>">
                     <div class="row">
                         <!-- Basic Information -->
                         <div class="col-md-12">

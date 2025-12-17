@@ -14,6 +14,12 @@ $db = Database::getInstance();
 
 // Handle delete
 if (isset($_POST['delete_id'])) {
+    // Verify CSRF token
+    if (!isset($_POST['csrf_token']) || !verifyCsrfToken($_POST['csrf_token'])) {
+        setFlash('danger', 'Invalid form submission. Please try again.');
+        redirect('admin/classes/index.php');
+    }
+    
     $deleteId = (int)$_POST['delete_id'];
     try {
         $db->query("UPDATE classes SET status = 'inactive' WHERE id = ? AND school_id = ?", [$deleteId, $_SESSION['school_id']]);
@@ -146,6 +152,7 @@ include APP_PATH . '/views/shared/header.php';
                                                     <i class="fas fa-edit"></i>
                                                 </a>
                                                 <form method="POST" style="display: inline;" onsubmit="return confirm('Are you sure you want to delete this class?');">
+                                                    <input type="hidden" name="csrf_token" value="<?php echo generateCsrfToken(); ?>">
                                                     <input type="hidden" name="delete_id" value="<?php echo $class['id']; ?>">
                                                     <button type="submit" class="btn btn-sm btn-danger" title="Delete">
                                                         <i class="fas fa-trash"></i>

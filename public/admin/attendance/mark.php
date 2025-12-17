@@ -23,12 +23,16 @@ if (!$selectedClass) {
 
 // Handle form submission
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $attendanceData = $_POST['attendance'] ?? [];
-    $remarks = $_POST['remarks'] ?? [];
-    
-    if (empty($attendanceData)) {
-        setFlash('danger', 'Please mark attendance for at least one student');
+    // Verify CSRF token
+    if (!isset($_POST['csrf_token']) || !verifyCsrfToken($_POST['csrf_token'])) {
+        setFlash('danger', 'Invalid form submission. Please try again.');
     } else {
+        $attendanceData = $_POST['attendance'] ?? [];
+        $remarks = $_POST['remarks'] ?? [];
+        
+        if (empty($attendanceData)) {
+            setFlash('danger', 'Please mark attendance for at least one student');
+        } else {
         try {
             $db->beginTransaction();
             
@@ -67,6 +71,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $db->rollBack();
             error_log("Failed to mark attendance: " . $e->getMessage());
             setFlash('danger', 'Failed to mark attendance. Please try again.');
+        }
         }
     }
 }
@@ -134,6 +139,7 @@ include APP_PATH . '/views/shared/header.php';
                 </div>
                 
                 <form method="POST" action="">
+                    <input type="hidden" name="csrf_token" value="<?php echo generateCsrfToken(); ?>">
                     <div class="table-responsive">
                         <table class="table">
                             <thead>

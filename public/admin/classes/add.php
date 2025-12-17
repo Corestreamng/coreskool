@@ -14,17 +14,21 @@ $db = Database::getInstance();
 
 // Handle form submission
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $name = sanitize($_POST['name']);
-    $classLevel = sanitize($_POST['class_level'] ?? '');
-    $section = sanitize($_POST['section'] ?? '');
-    $capacity = (int)($_POST['capacity'] ?? 40);
-    $classTeacherId = (int)($_POST['class_teacher_id'] ?? 0);
-    $roomNumber = sanitize($_POST['room_number'] ?? '');
-    
-    // Validate required fields
-    if (empty($name)) {
-        setFlash('danger', 'Class name is required');
+    // Verify CSRF token
+    if (!isset($_POST['csrf_token']) || !verifyCsrfToken($_POST['csrf_token'])) {
+        setFlash('danger', 'Invalid form submission. Please try again.');
     } else {
+        $name = sanitize($_POST['name']);
+        $classLevel = sanitize($_POST['class_level'] ?? '');
+        $section = sanitize($_POST['section'] ?? '');
+        $capacity = (int)($_POST['capacity'] ?? 40);
+        $classTeacherId = (int)($_POST['class_teacher_id'] ?? 0);
+        $roomNumber = sanitize($_POST['room_number'] ?? '');
+        
+        // Validate required fields
+        if (empty($name)) {
+            setFlash('danger', 'Class name is required');
+        } else {
         try {
             // Check if class name already exists
             $existingClass = $db->query("SELECT id FROM classes WHERE name = ? AND school_id = ? AND status = 'active'", 
@@ -57,6 +61,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             error_log("Failed to add class: " . $e->getMessage());
             setFlash('danger', 'Failed to add class. Please try again.');
         }
+        }
     }
 }
 
@@ -88,6 +93,7 @@ include APP_PATH . '/views/shared/header.php';
             
             <div class="card-body">
                 <form method="POST" action="">
+                    <input type="hidden" name="csrf_token" value="<?php echo generateCsrfToken(); ?>">
                     <div class="row">
                         <!-- Basic Information -->
                         <div class="col-md-12">
