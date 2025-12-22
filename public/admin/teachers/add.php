@@ -33,7 +33,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $error = 'Phone number already exists';
         } else {
             // Generate default password
-            $defaultPassword = 'teacher' . rand(1000, 9999);
+            $defaultPassword = 'teacher' . random_int(1000, 9999);
             $hashedPassword = hashPassword($defaultPassword);
             
             // Insert teacher

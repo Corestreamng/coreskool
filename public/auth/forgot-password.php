@@ -26,7 +26,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } else {
         // Check if email exists
         $db = Database::getInstance();
-        $userQuery = $db->query("SELECT id, first_name FROM users WHERE email = ? AND status = 'active'", [$email]);
+        define('USER_STATUS_ACTIVE', 'active');
+        $userQuery = $db->query("SELECT id, first_name FROM users WHERE email = ? AND status = ?", [$email, USER_STATUS_ACTIVE]);
         $user = $userQuery->fetch();
         
         if ($user) {

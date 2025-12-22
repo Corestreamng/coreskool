@@ -20,11 +20,12 @@ $validToken = false;
 // Verify token
 if (!empty($token)) {
     $db = Database::getInstance();
+    define('RESET_TOKEN_UNUSED', 0);
     $resetQuery = $db->query(
         "SELECT pr.*, u.email FROM password_resets pr 
          INNER JOIN users u ON pr.user_id = u.id 
-         WHERE pr.token = ? AND pr.expires_at > NOW() AND pr.used = 0",
-        [$token]
+         WHERE pr.token = ? AND pr.expires_at > NOW() AND pr.used = ?",
+        [$token, RESET_TOKEN_UNUSED]
     );
     $reset = $resetQuery->fetch();
     
