@@ -41,6 +41,7 @@ function getCurrentUser() {
         'role' => $_SESSION['user_role'],
         'name' => $_SESSION['user_name'] ?? '',
         'email' => $_SESSION['user_email'] ?? '',
+        'avatar' => $_SESSION['user_avatar'] ?? '',
         'school_id' => $_SESSION['school_id'] ?? null
     ];
 }
