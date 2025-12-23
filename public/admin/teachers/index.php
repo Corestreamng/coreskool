@@ -27,7 +27,6 @@ if (isset($_POST['delete_id'])) {
 // Pagination
 $page = $_GET['page'] ?? 1;
 $search = $_GET['search'] ?? '';
-$subjectFilter = $_GET['subject'] ?? '';
 
 $where = "WHERE u.role = 'teacher' AND u.school_id = ? AND u.status != 'inactive'";
 $params = [$_SESSION['school_id']];
