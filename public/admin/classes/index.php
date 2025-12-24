@@ -16,16 +16,16 @@ $db = Database::getInstance();
 $page = $_GET['page'] ?? 1;
 $search = $_GET['search'] ?? '';
 
-$where = "WHERE school_id = ? AND status = 'active'";
+$where = "WHERE c.school_id = ? AND c.status = 'active'";
 $params = [$_SESSION['school_id']];
 
 if ($search) {
-    $where .= " AND name LIKE ?";
+    $where .= " AND c.name LIKE ?";
     $params[] = "%$search%";
 }
 
 // Get total count
-$countSql = "SELECT COUNT(*) as total FROM classes $where";
+$countSql = "SELECT COUNT(*) as total FROM classes c $where";
 $totalStmt = $db->query($countSql, $params);
 $totalItems = $totalStmt->fetch()['total'];
 
