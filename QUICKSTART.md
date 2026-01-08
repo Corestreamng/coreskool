@@ -170,7 +170,8 @@ Each role has a custom dashboard with:
 
 ### Can't Login?
 - Check you're using the correct login method for your role
-- Verify credentials are correct
+- Verify credentials are correct (admin: email/phone; teacher: phone; student: matric)
+- **If admin login fails with correct credentials**: Run `fix_admin_password.php` (see ADMIN_PASSWORD_FIX.md)
 - Clear browser cache and cookies
 - Contact administrator
 
